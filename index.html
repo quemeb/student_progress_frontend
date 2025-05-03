@@ -68,7 +68,13 @@
         const email = document.getElementById("email").value;
         const student_id = document.getElementById("student_id").value;
 
-        document.getElementById("result").innerHTML = "<em>Authenticating and retrieving your data...</em>";
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "<em>Waking up server...</em>";
+
+        // First delay
+        setTimeout(() => {
+            resultDiv.innerHTML = "<em>Verifying your information...</em>";
+        }, 2000);
 
         fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
             .then(response => {
@@ -84,32 +90,39 @@
                     return "⏳";
                 };
 
-                let resultHTML = "<h3>Student Progress</h3>";
-                resultHTML += `<p><strong>Full Name:</strong> ${data.full_name}</p>`;
-                resultHTML += `<p><strong>Calbright Email:</strong> ${data.calbright_email}</p>`;
-                resultHTML += `<p><strong>Ccc Id:</strong> ${data.ccc_id}</p>`;
-                resultHTML += `<p><strong>Last Updated:</strong> ${data.last_updated}</p>`;
+                let resultHTML = `
+                    <h3>Student Progress</h3>
+                    <p><strong>Full Name:</strong> ${data.full_name}</p>
+                    <p><strong>Calbright Email:</strong> ${data.calbright_email}</p>
+                    <p><strong>Intended Program:</strong> ${data.intended_program}</p>
+                    <p><strong>Ccc Id:</strong> ${data.ccc_id}</p>
+                    <p><strong>Last Updated:</strong> ${data.last_updated}</p>
+                    <div style="display: flex; justify-content: space-between; gap: 20px;">
+                        <div style="flex: 1; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
+                            <h4>BUS500 Assignments:</h4>
+                            <p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
+                            <p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>
+                            <p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>
+                            <p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>
+                            <p><strong>Research:</strong> ${emoji(data.research_status)}</p>
+                            <p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>
+                            <p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>
+                        </div>
+                        <div style="flex: 1; background-color: #fffaf0; padding: 10px; border-radius: 8px;">
+                            <h4>BUS501 Assignments:</h4>
+                            <p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>
+                            <p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>
+                            <p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>
+                            <p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>
+                            <p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>
+                        </div>
+                    </div>
+                `;
 
-                resultHTML += `<h4>BUS500 Assignments:</h4>`;
-                resultHTML += `<p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>`;
-                resultHTML += `<p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>`;
-                resultHTML += `<p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>`;
-                resultHTML += `<p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>`;
-                resultHTML += `<p><strong>Research:</strong> ${emoji(data.research_status)}</p>`;
-                resultHTML += `<p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>`;
-                resultHTML += `<p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>`;
-
-                resultHTML += `<h4>BUS501 Assignments:</h4>`;
-                resultHTML += `<p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>`;
-                resultHTML += `<p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>`;
-                resultHTML += `<p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>`;
-                resultHTML += `<p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>`;
-                resultHTML += `<p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>`;
-
-                document.getElementById("result").innerHTML = resultHTML;
+                resultDiv.innerHTML = resultHTML;
             })
             .catch(error => {
-                document.getElementById("result").innerText = error.message;
+                resultDiv.innerText = error.message;
             });
     });
 	</script>
