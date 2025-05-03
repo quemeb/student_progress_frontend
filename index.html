@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Progress Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Check Your Data Analysis Program Progress</h2>
+        <form id="progressForm">
+            <input type="email" id="email" placeholder="Enter your email" required><br>
+            <input type="text" id="student_id" placeholder="Enter your student ID" required><br>
+            <button type="submit">Check Progress</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("progressForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const student_id = document.getElementById("student_id").value;
+
+            fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("No data found for this email and student ID combination.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById("result").innerText = error.message;
+                });
+        });
+    </script>
+</body>
+</html>
