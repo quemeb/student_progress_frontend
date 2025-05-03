@@ -2,54 +2,53 @@
 <html>
 <head>
     <title>Student Progress Checker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f8fb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+	<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f8fb;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+    input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #result {
+        margin-top: 20px;
+        white-space: pre-wrap;
+        text-align: left;
+        line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+        .assignments-container {
+            flex-direction: column;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            text-align: center;
-        }
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #result {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .complete {
-            color: green;
-            font-weight: bold;
-        }
-        .incomplete {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
+    }
+	</style>
 </head>
 <body>
     <div class="container">
@@ -105,7 +104,7 @@
                     <p><strong>Intended Program:</strong> ${data.intended_program}</p>
                     <p><strong>Ccc Id:</strong> ${data.ccc_id}</p>
                     <p><strong>Last Updated:</strong> ${data.last_updated}</p>
-                    <div style="display: flex; justify-content: space-between; gap: 20px;">
+                    <div class="assignments-container" style="display: flex; justify-content: space-between; gap: 20px;">
                         <div style="flex: 1; background-color: #f0f8ff; padding: 10px; border-radius: 8px; line-height: 1.6;">
                             <h4>BUS500 Assignments:</h4>
                             <p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
