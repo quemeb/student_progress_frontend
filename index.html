@@ -62,58 +62,56 @@
         <div id="result"></div>
     </div>
 
-    <script>
-        document.getElementById("progressForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const email = document.getElementById("email").value;
-            const student_id = document.getElementById("student_id").value;
+	<script>
+    document.getElementById("progressForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const student_id = document.getElementById("student_id").value;
 
-            fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("No data found for this email and student ID combination.");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const order = [
-                        "full_name",
-                        "calbright_email",
-                        "intended_program",
-                        "ccc_id",
-                        "terminology_status",
-                        "spreadsheets_status",
-                        "basic_sql_queries_status",
-                        "presentation_skills_status",
-                        "research_status",
-                        "data_validity_status",
-                        "mathematical_principles_status",
-                        "intermediate_sql_queries_status",
-                        "data_presentation_skills_status",
-                        "data_ethics_status",
-                        "professional_learning_status",
-                        "durable_skills_status"
-                    ];
+        document.getElementById("result").innerHTML = "<em>Authenticating and retrieving your data...</em>";
 
-                    let html = `<h3>Student Progress</h3><ul style="list-style:none; padding:0;">`;
-                    order.forEach(key => {
-                        if (data[key] !== undefined) {
-                            let label = key
-                                .replace(/_/g, ' ')
-                                .replace('status', '')
-                                .replace(/\b\w/g, c => c.toUpperCase());
-                            let value = data[key];
-                            let statusClass = value === "Complete" ? "complete" : value === "Incomplete" ? "incomplete" : "";
-                            html += `<li><strong>${label}:</strong> <span class="${statusClass}">${value}</span></li>`;
-                        }
-                    });
-                    html += `</ul>`;
-                    document.getElementById("result").innerHTML = html;
-                })
-                .catch(error => {
-                    document.getElementById("result").innerText = error.message;
-                });
-        });
-    </script>
+        fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("No data found for this email and student ID combination.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                let emoji = status => {
+                    if (status === "Complete") return "✅";
+                    if (status === "Incomplete") return "❌";
+                    return "⏳";
+                };
+
+                let resultHTML = "<h3>Student Progress</h3>";
+                resultHTML += `<p><strong>Full Name:</strong> ${data.full_name}</p>`;
+                resultHTML += `<p><strong>Calbright Email:</strong> ${data.calbright_email}</p>`;
+                resultHTML += `<p><strong>Ccc Id:</strong> ${data.ccc_id}</p>`;
+                resultHTML += `<p><strong>Last Updated:</strong> ${data.last_updated}</p>`;
+
+                resultHTML += `<h4>BUS500 Assignments:</h4>`;
+                resultHTML += `<p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>`;
+                resultHTML += `<p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>`;
+                resultHTML += `<p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>`;
+                resultHTML += `<p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>`;
+                resultHTML += `<p><strong>Research:</strong> ${emoji(data.research_status)}</p>`;
+                resultHTML += `<p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>`;
+                resultHTML += `<p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>`;
+
+                resultHTML += `<h4>BUS501 Assignments:</h4>`;
+                resultHTML += `<p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>`;
+                resultHTML += `<p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>`;
+                resultHTML += `<p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>`;
+                resultHTML += `<p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>`;
+                resultHTML += `<p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>`;
+
+                document.getElementById("result").innerHTML = resultHTML;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = error.message;
+            });
+    });
+	</script>
 </body>
 </html>
