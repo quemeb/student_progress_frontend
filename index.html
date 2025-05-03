@@ -2,48 +2,48 @@
 <html>
 <head>
     <title>Student Progress Checker</title>
-	<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f8fb;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    .container {
-        background-color: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        width: 400px;
-        text-align: center;
-    }
-    input {
-        width: 90%;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    button {
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #45a049;
-    }
-    #result {
-        margin-top: 20px;
-        white-space: pre-wrap;
-        text-align: left;
-        line-height: 1.6;
-    }
-	</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -56,79 +56,82 @@
         <div id="result"></div>
     </div>
 
-	<script>
-    document.getElementById("progressForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const email = document.getElementById("email").value;
-        const student_id = document.getElementById("student_id").value;
+<script>
+document.getElementById("progressForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const student_id = document.getElementById("student_id").value;
 
-        const resultDiv = document.getElementById("result");
-		resultDiv.innerHTML = "<em>Waking up server...</em>";
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "<em>Waking up server...</em>";
 
-		// Set a flag to track if data has been received
-		let dataReceived = false;
+    let dataReceived = false;
 
-		const verifyTimeout = setTimeout(() => {
-			if (!dataReceived) {
-				resultDiv.innerHTML = "<em>Verifying your information...</em>";
-			}
-		}, 200);
+    const verifyTimeout = setTimeout(() => {
+        if (!dataReceived) {
+            resultDiv.innerHTML = "<em>Verifying your information...</em>";
+        }
+    }, 2000);
 
-		fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
-			.then(response => {
-				if (!response.ok) {
-					throw new Error("No data found for this email and student ID combination.");
-				}
-				return response.json();
-			})
-            .then(data => {
-			
-				dataReceived = true; // mark data as received
-				clearTimeout(verifyTimeout); // stop the verifying message from overriding result
-				
-                let emoji = status => {
-                    if (status === "Complete") return "✅";
-                    if (status === "Incomplete") return "❌";
-                    return "⏳";
-                };
+    fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("No data found for this email and student ID combination.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            dataReceived = true;
+            clearTimeout(verifyTimeout);
 
-                let resultHTML = `
-                    <h3>Student Progress</h3>
-                    <p><strong>Full Name:</strong> ${data.full_name}</p>
-                    <p><strong>Calbright Email:</strong> ${data.calbright_email}</p>
-                    <p><strong>Intended Program:</strong> ${data.intended_program}</p>
-                    <p><strong>Ccc Id:</strong> ${data.ccc_id}</p>
-                    <p><strong>Last Updated:</strong> ${data.last_updated}</p>
-                    <div style="display: flex; justify-content: space-between; gap: 20px;">
-                        <div style="flex: 1; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
-                            <h4>BUS500 Assignments:</h4>
-                            <p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
-                            <p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>
-                            <p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>
-                            <p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>
-                            <p><strong>Research:</strong> ${emoji(data.research_status)}</p>
-                            <p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>
-                            <p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>
-                        </div>
-                        <div style="flex: 1; background-color: #fffaf0; padding: 10px; border-radius: 8px;">
-                            <h4>BUS501 Assignments:</h4>
-                            <p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>
-                            <p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>
-                            <p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>
-                            <p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>
-                            <p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>
-                        </div>
+            if (data.message) {
+                resultDiv.innerHTML = `<strong>${data.message}</strong>`;
+                return;
+            }
+
+            let emoji = status => {
+                if (status === "Complete") return "✅";
+                if (status === "Incomplete") return "❌";
+                return "⏳";
+            };
+
+            let resultHTML = `
+                <h3>Student Progress</h3>
+                <p><strong>Full Name:</strong> ${data.full_name}</p>
+                <p><strong>Calbright Email:</strong> ${data.calbright_email}</p>
+                <p><strong>Intended Program:</strong> ${data.intended_program}</p>
+                <p><strong>Student ID:</strong> ${data.ccc_id}</p>
+                <p><strong>Last Updated:</strong> ${data.last_updated}</p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 300px; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
+                        <h4>BUS500 Assignments</h4>
+                        <p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
+                        <p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>
+                        <p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>
+                        <p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>
+                        <p><strong>Research:</strong> ${emoji(data.research_status)}</p>
+                        <p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>
+                        <p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>
                     </div>
-                `;
+                    <div style="flex: 1; min-width: 300px; background-color: #fffaf0; padding: 10px; border-radius: 8px;">
+                        <h4>BUS501 Assignments</h4>
+                        <p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>
+                        <p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>
+                        <p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>
+                        <p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>
+                        <p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>
+                    </div>
+                </div>
+            `;
 
-                resultDiv.innerHTML = resultHTML;
-            })
-            .catch(error => {
-				dataReceived = true;
-				clearTimeout(verifyTimeout);
-				resultDiv.innerText = error.message;
-            });
-    });
-	</script>
+            resultDiv.innerHTML = resultHTML;
+        })
+        .catch(error => {
+            dataReceived = true;
+            clearTimeout(verifyTimeout);
+            resultDiv.innerHTML = `<strong>${error.message}</strong>`;
+        });
+});
+</script>
 </body>
 </html>
