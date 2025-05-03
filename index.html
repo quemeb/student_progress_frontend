@@ -69,21 +69,29 @@
         const student_id = document.getElementById("student_id").value;
 
         const resultDiv = document.getElementById("result");
-        resultDiv.innerHTML = "<em>Waking up server...</em>";
+		resultDiv.innerHTML = "<em>Waking up server...</em>";
 
-        // First delay
-        setTimeout(() => {
-            resultDiv.innerHTML = "<em>Verifying your information...</em>";
-        }, 2000);
+		// Set a flag to track if data has been received
+		let dataReceived = false;
 
-        fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("No data found for this email and student ID combination.");
-                }
-                return response.json();
-            })
+		const verifyTimeout = setTimeout(() => {
+			if (!dataReceived) {
+				resultDiv.innerHTML = "<em>Verifying your information...</em>";
+			}
+		}, 200);
+
+		fetch(`https://student-progress-api.onrender.com/get_student_progress?email=${encodeURIComponent(email)}&student_id=${encodeURIComponent(student_id)}`)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("No data found for this email and student ID combination.");
+				}
+				return response.json();
+			})
             .then(data => {
+			
+				dataReceived = true; // mark data as received
+				clearTimeout(verifyTimeout); // stop the verifying message from overriding result
+				
                 let emoji = status => {
                     if (status === "Complete") return "✅";
                     if (status === "Incomplete") return "❌";
@@ -98,7 +106,7 @@
                     <p><strong>Ccc Id:</strong> ${data.ccc_id}</p>
                     <p><strong>Last Updated:</strong> ${data.last_updated}</p>
                     <div style="display: flex; justify-content: space-between; gap: 20px;">
-                        <div style="flex: 1; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
+                        <div style="flex: 1; background-color: #f0f8ff; padding: 10px; border-radius: 8px; line-height: 1.6;">
                             <h4>BUS500 Assignments:</h4>
                             <p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
                             <p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>
@@ -108,7 +116,7 @@
                             <p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>
                             <p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>
                         </div>
-                        <div style="flex: 1; background-color: #fffaf0; padding: 10px; border-radius: 8px;">
+                        <div style="flex: 1; background-color: #fffaf0; padding: 10px; border-radius: 8px; line-height: 1.6;">
                             <h4>BUS501 Assignments:</h4>
                             <p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>
                             <p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>
@@ -122,7 +130,9 @@
                 resultDiv.innerHTML = resultHTML;
             })
             .catch(error => {
-                resultDiv.innerText = error.message;
+				dataReceived = true;
+				clearTimeout(verifyTimeout);
+				resultDiv.innerText = error.message;
             });
     });
 	</script>
