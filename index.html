@@ -39,8 +39,15 @@
         }
         #result {
             margin-top: 20px;
-            white-space: pre-wrap;
             text-align: left;
+        }
+        .complete {
+            color: green;
+            font-weight: bold;
+        }
+        .incomplete {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -69,7 +76,39 @@
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+                    const order = [
+                        "full_name",
+                        "calbright_email",
+                        "intended_program",
+                        "ccc_id",
+                        "terminology_status",
+                        "spreadsheets_status",
+                        "basic_sql_queries_status",
+                        "presentation_skills_status",
+                        "research_status",
+                        "data_validity_status",
+                        "mathematical_principles_status",
+                        "intermediate_sql_queries_status",
+                        "data_presentation_skills_status",
+                        "data_ethics_status",
+                        "professional_learning_status",
+                        "durable_skills_status"
+                    ];
+
+                    let html = `<h3>Student Progress</h3><ul style="list-style:none; padding:0;">`;
+                    order.forEach(key => {
+                        if (data[key] !== undefined) {
+                            let label = key
+                                .replace(/_/g, ' ')
+                                .replace('status', '')
+                                .replace(/\b\w/g, c => c.toUpperCase());
+                            let value = data[key];
+                            let statusClass = value === "Complete" ? "complete" : value === "Incomplete" ? "incomplete" : "";
+                            html += `<li><strong>${label}:</strong> <span class="${statusClass}">${value}</span></li>`;
+                        }
+                    });
+                    html += `</ul>`;
+                    document.getElementById("result").innerHTML = html;
                 })
                 .catch(error => {
                     document.getElementById("result").innerText = error.message;
