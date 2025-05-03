@@ -43,11 +43,13 @@
         text-align: left;
         line-height: 1.6;
     }
-    @media (max-width: 768px) {
-        .assignments-container {
-            flex-direction: column;
-        }
-    }
+	.assignments-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    line-height: 1.6; /* Keep this for better spacing */
+	}
 	</style>
 </head>
 <body>
