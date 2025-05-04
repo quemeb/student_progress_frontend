@@ -49,8 +49,8 @@
     <div class="container">
         <h2>Check Your Data Analysis Program Progress</h2>
         <form id="progressForm">
-            <input type="email" id="email" placeholder="Enter your email" required><br>
-            <input type="text" id="student_id" placeholder="Enter your student ID" required><br>
+            <input type="email" id="email" placeholder="Enter your Calbright email" required><br>
+            <input type="text" id="student_id" placeholder="Enter your Calbright student ID" required><br>
             <button type="submit">Check Progress</button>
         </form>
         <div id="result"></div>
@@ -97,11 +97,8 @@ document.getElementById("progressForm").addEventListener("submit", function(e) {
 
             let resultHTML = `
                 <h3>Student Progress</h3>
-                <p><strong>Full Name:</strong> ${data.full_name}</p>
-                <p><strong>Calbright Email:</strong> ${data.calbright_email}</p>
-                <p><strong>Intended Program:</strong> ${data.intended_program}</p>
-                <p><strong>Student ID:</strong> ${data.ccc_id}</p>
-                <p><strong>Last Updated:</strong> ${data.last_updated}</p>
+                <p><strong>Student's Name:</strong> ${data.full_name}</p>
+                <p><strong>DB Last Updated:</strong> ${data.last_updated}</p>
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
                     <div style="flex: 1; min-width: 300px; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
                         <h4>BUS500 Assignments</h4>
