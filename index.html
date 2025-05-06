@@ -95,31 +95,40 @@ document.getElementById("progressForm").addEventListener("submit", function(e) {
                 return "⏳";
             };
 
-            let resultHTML = `
-                <h3>Student Progress</h3>
-                <p><strong>Student's Name:</strong> ${data.full_name}</p>
-                <p><strong>DB Last Updated:</strong> ${data.last_updated}</p>
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
-                    <div style="flex: 1; min-width: 300px; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
-                        <h4>BUS500 Assignments</h4>
-                        <p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
-                        <p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>
-                        <p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>
-                        <p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>
-                        <p><strong>Research:</strong> ${emoji(data.research_status)}</p>
-                        <p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>
-                        <p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>
-                    </div>
-                    <div style="flex: 1; min-width: 300px; background-color: #fffaf0; padding: 10px; border-radius: 8px;">
-                        <h4>BUS501 Assignments</h4>
-                        <p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>
-                        <p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>
-                        <p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>
-                        <p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>
-                        <p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>
-                    </div>
-                </div>
-            `;
+			let resultHTML = `
+				<h3>Student Progress</h3>
+				<p><strong>Student's Name:</strong> ${data.full_name}</p>
+				<p><strong>DB Last Updated:</strong> ${data.last_updated}</p>
+				<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+					<div style="flex: 1; min-width: 300px; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
+						<h4>BUS500 Assignments</h4>
+						<p><strong>Terminology:</strong> ${emoji(data.terminology_status)}</p>
+						<p><strong>Spreadsheets:</strong> ${emoji(data.spreadsheets_status)}</p>
+						<p><strong>Basic SQL Queries:</strong> ${emoji(data.basic_sql_queries_status)}</p>
+						<p><strong>Presentation Skills:</strong> ${emoji(data.presentation_skills_status)}</p>
+						<p><strong>Research:</strong> ${emoji(data.research_status)}</p>
+						<p><strong>Data Validity:</strong> ${emoji(data.data_validity_status)}</p>
+						<p><strong>Mathematical Principles:</strong> ${emoji(data.mathematical_principles_status)}</p>
+					</div>
+					<div style="flex: 1; min-width: 300px; background-color: #fffaf0; padding: 10px; border-radius: 8px;">
+						<h4>BUS501 Assignments</h4>
+						<p><strong>Intermediate SQL Queries:</strong> ${emoji(data.intermediate_sql_queries_status)}</p>
+						<p><strong>Data Presentation Skills:</strong> ${emoji(data.data_presentation_skills_status)}</p>
+						<p><strong>Data Ethics:</strong> ${emoji(data.data_ethics_status)}</p>
+						<p><strong>Professional Learning:</strong> ${emoji(data.professional_learning_status)}</p>
+						<p><strong>Durable Skills:</strong> ${emoji(data.durable_skills_status)}</p>
+					</div>
+				</div>
+				<div style="margin-top: 20px; font-size: 0.95em; color: #555; text-align: left;">
+					<strong>Disclaimer:</strong> This progress report does not include Summative 12A (the resume assignment). 
+					There is no Canvas badge awarded for it so this website is unable to check for it. 
+					Summative 12A must also be passed with an 80% or higher. Please check your gradebook or ask your professor if you have any questions.<br><br>
+					❌ means you've either not completed or not passed an assignment. If you need to view feedback for an attempt, watch 
+					<a href="https://youtu.be/O26a5J2TBqM" target="_blank">this video</a>. 
+					If you have multiple attempts, watch 
+					<a href="https://youtu.be/04AF8juBMTI" target="_blank">this one</a>.
+				</div>
+			`;
 
             resultDiv.innerHTML = resultHTML;
         })
